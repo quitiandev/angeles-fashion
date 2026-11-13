@@ -6,6 +6,9 @@ from models.user import Usuarios
 from schemas.auth import LoginRequest, TokenResponse
 from core.security import verificar_contrasena, crear_token
 
+from core.dependencies import obtener_usuario_actual
+from schemas.user import UsuarioRespuesta
+
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 
@@ -27,3 +30,10 @@ def iniciar_sesion(datos: LoginRequest, db: Session = Depends(get_db)):
     token = crear_token(usuario.id)
 
     return TokenResponse(access_token=token)
+
+
+@router.get("/me", response_model=UsuarioRespuesta)
+def obtener_mi_perfil(
+    usuario: Usuarios = Depends(obtener_usuario_actual),
+):
+    return usuario

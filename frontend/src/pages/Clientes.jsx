@@ -240,32 +240,37 @@ export default function Clientes({ token }) {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#85486e]">
+            Directorio
+          </p>
+          <h2 className="text-2xl font-semibold tracking-tight text-[#292524]">
             Gestión de clientes
           </h2>
-          <p className="text-gray-500">
-            Registra y administra los clientes de Ángeles Fashion.
+          <p className="mt-1 text-sm text-[#8a817d]">
+            Organiza los datos de contacto de tus clientes.
           </p>
         </div>
-
         <button
+          type="button"
           onClick={mostrarFormulario ? cancelarFormulario : nuevoCliente}
-          className="rounded-lg bg-rose-600 px-5 py-2 text-white hover:bg-rose-700"
+          className={`cursor-pointer rounded-lg px-5 py-2.5 text-sm font-medium transition ${mostrarFormulario ? "border border-[#eae6e3] bg-white text-[#57534e] hover:bg-[#faf8f7]" : "bg-[#85486e] text-white hover:bg-[#713a5d]"}`}
         >
           {mostrarFormulario ? "Cancelar" : "+ Agregar cliente"}
         </button>
       </div>
 
       {error && (
-        <div role="alert" className="rounded-lg bg-red-100 p-3 text-red-700">
+        <div
+          role="alert"
+          className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+        >
           {error}
         </div>
       )}
-
       {mensaje && (
         <div
           role="status"
-          className="rounded-lg bg-green-100 p-3 text-green-700"
+          className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
         >
           {mensaje}
         </div>
@@ -274,119 +279,188 @@ export default function Clientes({ token }) {
       {mostrarFormulario && (
         <form
           onSubmit={guardarCliente}
-          className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+          className="overflow-hidden rounded-2xl border border-[#eae6e3] bg-white"
         >
-          <h3 className="mb-5 text-lg font-semibold text-gray-800">
-            {clienteEditando !== null
-              ? "Editar cliente"
-              : "Registrar nuevo cliente"}
-          </h3>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="border-b border-[#eeeae7] px-5 py-5 md:px-7">
+            <h3 className="text-lg font-semibold text-[#292524]">
+              {clienteEditando !== null
+                ? "Editar cliente"
+                : "Registrar nuevo cliente"}
+            </h3>
+            <p className="mt-1 text-sm text-[#8a817d]">
+              Completa la información del cliente.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-5 px-5 py-6 md:grid-cols-2 md:px-7">
             {campos.map((campo) => (
-              <label key={campo.nombre} className="space-y-1">
-                <span className="text-sm font-medium text-gray-700">
+              <label key={campo.nombre} className="block space-y-2">
+                <span className="text-sm font-medium text-[#57534e]">
                   {campo.etiqueta}
                 </span>
-
                 <input
                   type={campo.tipo}
                   name={campo.nombre}
                   value={formulario[campo.nombre]}
                   onChange={cambiarCampo}
                   required
-                  className="w-full rounded-lg border border-gray-300 p-2 outline-none focus:border-rose-500"
+                  className="w-full rounded-lg border border-[#e3dedb] bg-white px-3.5 py-3 text-sm text-[#292524] outline-none transition placeholder:text-[#a8a29e] focus:border-[#85486e] focus:ring-2 focus:ring-[#85486e]/10"
                 />
               </label>
             ))}
           </div>
-
-          <button
-            type="submit"
-            disabled={guardando}
-            className="mt-5 rounded-lg bg-rose-600 px-6 py-2 text-white hover:bg-rose-700 disabled:opacity-50"
-          >
-            {guardando
-              ? "Guardando..."
-              : clienteEditando !== null
-                ? "Actualizar cliente"
-                : "Guardar cliente"}
-          </button>
+          <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[#eeeae7] bg-[#fcfbfa] px-5 py-4 md:px-7">
+            <button
+              type="button"
+              onClick={cancelarFormulario}
+              className="cursor-pointer rounded-lg border border-[#e3dedb] bg-white px-5 py-2.5 text-sm font-medium text-[#57534e] hover:bg-[#f8f7f5]"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={guardando}
+              className="cursor-pointer rounded-lg bg-[#85486e] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#713a5d] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {guardando
+                ? "Guardando..."
+                : clienteEditando !== null
+                  ? "Actualizar cliente"
+                  : "Guardar cliente"}
+            </button>
+          </div>
         </form>
       )}
 
-      <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-        <input
-          type="search"
-          placeholder="Buscar por nombre, documento, correo o teléfono..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 p-3 outline-none focus:border-rose-500"
-        />
-      </div>
+      <div className="overflow-hidden rounded-2xl border border-[#eae6e3] bg-white">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#eeeae7] px-5 py-5 md:px-7">
+          <div>
+            <h3 className="text-base font-semibold text-[#292524]">
+              Directorio de clientes
+            </h3>
+            <p className="mt-1 text-xs text-[#8a817d]">
+              {clientes.length}{" "}
+              {clientes.length === 1
+                ? "cliente registrado"
+                : "clientes registrados"}
+            </p>
+          </div>
+          <div className="relative w-full sm:w-85">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#a8a29e]"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-4-4" />
+            </svg>
+            <input
+              type="search"
+              aria-label="Buscar clientes"
+              placeholder="Buscar nombre, documento, correo..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              className="w-full rounded-lg border border-[#e3dedb] bg-[#fcfbfa] py-2.5 pl-10 pr-3 text-sm text-[#292524] outline-none transition placeholder:text-[#a8a29e] focus:border-[#85486e] focus:bg-white"
+            />
+          </div>
+        </div>
 
-      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
         {cargando ? (
-          <p className="p-6 text-gray-500">Cargando clientes...</p>
-        ) : clientesFiltrados.length === 0 ? (
-          <p className="p-6 text-gray-500">
-            {busqueda
-              ? "No se encontraron clientes con esa búsqueda."
-              : "No hay clientes registrados."}
+          <p className="px-7 py-12 text-center text-sm text-[#8a817d]">
+            Cargando clientes...
           </p>
+        ) : clientesFiltrados.length === 0 ? (
+          <div className="px-7 py-14 text-center">
+            <p className="font-medium text-[#57534e]">
+              {busqueda
+                ? "No se encontraron resultados"
+                : "Todavía no hay clientes"}
+            </p>
+            <p className="mt-1 text-sm text-[#a8a29e]">
+              {busqueda
+                ? "Prueba con otro nombre, documento o dato de contacto."
+                : "Registra tu primer cliente para comenzar."}
+            </p>
+          </div>
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="p-4">ID</th>
-                <th className="p-4">Nombre</th>
-                <th className="p-4">Documento</th>
-                <th className="p-4">Teléfono</th>
-                <th className="p-4">Correo</th>
-                <th className="p-4">Acciones</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {clientesFiltrados.map((cliente) => (
-                <tr key={cliente.id} className="border-t">
-                  <td className="p-4">{cliente.id}</td>
-                  <td className="p-4">
-                    {cliente.nombre} {cliente.apellido}
-                  </td>
-                  <td className="p-4">{cliente.documento_identidad}</td>
-                  <td className="p-4">{cliente.telefono}</td>
-                  <td className="p-4">{cliente.correo}</td>
-                  <td className="p-4">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => editarCliente(cliente)}
-                        className="rounded-lg bg-blue-100 px-3 py-1 text-blue-700 hover:bg-blue-200"
-                      >
-                        Editar
-                      </button>
-
-                      <button
-                        onClick={() => eliminarCliente(cliente)}
-                        disabled={eliminandoId === cliente.id}
-                        className="rounded-lg bg-red-100 px-3 py-1 text-red-700 hover:bg-red-200 disabled:opacity-50"
-                      >
-                        {eliminandoId === cliente.id
-                          ? "Eliminando..."
-                          : "Eliminar"}
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-190 text-left text-sm">
+              <thead className="bg-[#fcfbfa] text-xs font-semibold uppercase tracking-wide text-[#8a817d]">
+                <tr>
+                  <th className="px-5 py-4 font-semibold md:pl-7">Cliente</th>
+                  <th className="px-5 py-4 font-semibold">Documento</th>
+                  <th className="px-5 py-4 font-semibold">Teléfono</th>
+                  <th className="px-5 py-4 font-semibold">Correo</th>
+                  <th className="px-5 py-4 text-right font-semibold md:pr-7">
+                    Acciones
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[#f0edeb]">
+                {clientesFiltrados.map((cliente) => (
+                  <tr
+                    key={cliente.id}
+                    className="transition hover:bg-[#fcfbfa]"
+                  >
+                    <td className="px-5 py-4 md:pl-7">
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f4e8ef] text-xs font-semibold text-[#85486e]">
+                          {`${(cliente.nombre || "").charAt(0)}${(cliente.apellido || "").charAt(0)}`.toUpperCase()}
+                        </span>
+                        <div>
+                          <p className="font-medium text-[#292524]">
+                            {cliente.nombre} {cliente.apellido}
+                          </p>
+                          <p className="text-xs text-[#a8a29e]">
+                            ID #{cliente.id}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-4 text-[#57534e]">
+                      {cliente.documento_identidad}
+                    </td>
+                    <td className="px-5 py-4 text-[#57534e]">
+                      {cliente.telefono || "—"}
+                    </td>
+                    <td className="px-5 py-4 text-[#57534e]">
+                      {cliente.correo || "—"}
+                    </td>
+                    <td className="px-5 py-4 md:pr-7">
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => editarCliente(cliente)}
+                          className="cursor-pointer rounded-lg border border-[#eae6e3] bg-white px-3 py-2 text-xs font-medium text-[#57534e] transition hover:border-[#c8a5b7] hover:text-[#85486e]"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => eliminarCliente(cliente)}
+                          disabled={eliminandoId === cliente.id}
+                          className="cursor-pointer rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {eliminandoId === cliente.id
+                            ? "Eliminando..."
+                            : "Eliminar"}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {!cargando && clientesFiltrados.length > 0 && (
+          <div className="border-t border-[#eeeae7] px-5 py-3 text-xs text-[#8a817d] md:px-7">
+            Mostrando {clientesFiltrados.length} de {clientes.length} clientes
+          </div>
         )}
       </div>
-
-      <p className="text-sm text-gray-500">
-        Total de clientes: {clientes.length}
-      </p>
     </div>
   );
 }

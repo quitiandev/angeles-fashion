@@ -8,88 +8,103 @@ function Login({
   manejarEnvio,
 }) {
   return (
-    <main className="min-h-screen flex flex-col md:flex-row bg-white">
-      <section className="relative w-full md:w-1/2 min-h-72 md:min-h-screen bg-rose-100 flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute w-105 h-105 md:w-162.5 md:h-162.5 bg-[#bd729d]"
-          style={{
-            clipPath:
-              "polygon(50% 0%, 62% 25%, 85% 12%, 75% 38%, 100% 50%, 75% 62%, 85% 88%, 62% 75%, 50% 100%, 38% 75%, 15% 88%, 25% 62%, 0% 50%, 25% 38%, 15% 12%, 38% 25%)",
-          }}
-        />
+    <main className="flex min-h-screen items-center justify-center bg-[#f8f7f5] px-5 py-12">
+      <div className="w-full max-w-100">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <div className="relative mb-7 flex h-64 w-64 items-center justify-center sm:h-68 sm:w-68">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[#c08ca8]"
+              style={{
+                clipPath:
+                  "polygon(50% 0%, 60% 22%, 75% 7%, 75% 30%, 93% 25%, 82% 43%, 100% 50%, 82% 57%, 93% 75%, 75% 70%, 75% 93%, 60% 78%, 50% 100%, 40% 78%, 25% 93%, 25% 70%, 7% 75%, 18% 57%, 0% 50%, 18% 43%, 7% 25%, 25% 30%, 25% 7%, 40% 22%)",
+              }}
+            />
 
-        <div className="relative z-10 flex flex-col items-center">
-          <img
-            src="/images/logo.png"
-            alt="Logo de Ángeles Fashion"
-            className="w-40 md:w-64 h-auto object-contain"
-          />
-        </div>
-      </section>
+            <img
+              src="/images/logo.png"
+              alt="Ángeles Fashion"
+              className="relative z-10 h-auto w-36 object-contain sm:w-40 translate-x-1"
+            />
+          </div>
 
-      <section className="w-full md:w-1/2 flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-sm">
-          <h2 className="text-3xl font-bold text-gray-900">Bienvenida</h2>
+          <div className="mb-5 h-px w-10 bg-[#d9c6d1]" />
 
-          <p className="mt-2 mb-8 text-gray-500">
-            Inicia sesión para administrar tu boutique
+          <h1 className="text-[27px] font-medium tracking-tight text-[#302a2e]">
+            Bienvenida
+          </h1>
+
+          <p className="mt-2 text-sm leading-relaxed text-[#8b8589]">
+            Ingresa para gestionar la boutique
           </p>
-
-          <form onSubmit={manejarEnvio} className="space-y-5">
-            <div>
-              <label
-                htmlFor="correo"
-                className="block mb-2 text-sm font-medium text-gray-700"
-              >
-                Correo electrónico
-              </label>
-
-              <input
-                id="correo"
-                type="email"
-                required
-                value={correo}
-                onChange={(e) => setCorreo(e.target.value)}
-                placeholder="correo@ejemplo.com"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-[#bd729d]"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="contrasena"
-                className="block mb-2 text-sm font-medium text-gray-700"
-              >
-                Contraseña
-              </label>
-
-              <input
-                id="contrasena"
-                type="password"
-                required
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
-                placeholder="Ingresa tu contraseña"
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-[#bd729d]"
-              />
-            </div>
-
-            {error && (
-              <p role="alert" className="text-sm text-red-600">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={cargando}
-              className="w-full rounded-lg bg-[#85486e] py-3 font-semibold text-white hover:bg-[#70385a] disabled:opacity-50 cursor-pointer"
-            >
-              {cargando ? "Ingresando..." : "Iniciar sesión"}
-            </button>
-          </form>
         </div>
-      </section>
+
+        <form
+          onSubmit={manejarEnvio}
+          className="space-y-5 rounded-2xl border border-[#ebe7e8] bg-white px-7 py-8 sm:px-9"
+        >
+          <div className="space-y-2">
+            <label
+              htmlFor="correo"
+              className="block text-[13px] font-medium text-[#514b4f]"
+            >
+              Correo electrónico
+            </label>
+
+            <input
+              id="correo"
+              type="email"
+              autoComplete="username"
+              required
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              placeholder="correo@ejemplo.com"
+              className="w-full rounded-lg border border-[#e9e5e7] bg-white px-4 py-3 text-sm text-[#302a2e] outline-none transition-colors placeholder:text-[#b7b1b5] focus:border-[#85486e]"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="contrasena"
+              className="block text-[13px] font-medium text-[#514b4f]"
+            >
+              Contraseña
+            </label>
+
+            <input
+              id="contrasena"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              placeholder="Ingresa tu contraseña"
+              className="w-full rounded-lg border border-[#e9e5e7] bg-white px-4 py-3 text-sm text-[#302a2e] outline-none transition-colors placeholder:text-[#b7b1b5] focus:border-[#85486e]"
+            />
+          </div>
+
+          {error && (
+            <div
+              role="alert"
+              className="rounded-lg bg-[#fcf3f3] px-4 py-3 text-sm text-[#a34b54]"
+            >
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={cargando}
+            className="mt-2 w-full cursor-pointer rounded-lg bg-[#85486e] px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-[#713a5c] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {cargando ? "Ingresando..." : "Iniciar sesión"}
+          </button>
+        </form>
+
+        <p className="mt-8 text-center text-xs tracking-wide text-[#aaa3a7]">
+          Ángeles Fashion Etiqueta & Glamour
+        </p>
+      </div>
     </main>
   );
 }

@@ -6,6 +6,7 @@ from routers.garments import router as garments_router
 from routers.sales import router as sales_router
 from routers.rentals import router as rentals_router
 from routers import reports
+from routers.users import router as users_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Angeles Fashion API")
@@ -25,6 +26,7 @@ app.include_router(garments_router)
 app.include_router(sales_router)
 app.include_router(rentals_router)
 app.include_router(reports.router)
+app.include_router(users_router)
 
 
 @app.get("/")

@@ -33,7 +33,7 @@ def crear_categoria(categoria: CategoriaCreate, db: Session = Depends(get_db)):
         )
 
     nueva_categoria = Categorias(
-        nombre=categoria.nombre, descripcion=categoria.descripcion
+        nombre=categoria.nombre.strip(), descripcion=categoria.descripcion
     )
 
     db.add(nueva_categoria)

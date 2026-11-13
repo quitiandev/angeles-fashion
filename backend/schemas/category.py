@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class CategoriaCreate(BaseModel):
-    nombre: str = Field(min_length=2, max_length=100)
-    descripcion: str | None = Field(default=None, max_length=500)
+    nombre: str = Field(min_length=2, max_length=50)
+    descripcion: str | None = Field(default=None, max_length=255)
 
     @field_validator("nombre")
     @classmethod

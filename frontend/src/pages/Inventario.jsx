@@ -228,19 +228,36 @@ export default function Inventario({ token }) {
       maximumFractionDigits: 0,
     });
 
+  const campoClase =
+    "w-full rounded-lg border border-[#e7e1df] bg-white px-3.5 py-2.5 text-sm text-[#292524] outline-none transition placeholder:text-[#b4aaa5] focus:border-[#85486e] focus:ring-2 focus:ring-[#85486e]/10";
+  const etiquetaClase = "mb-1.5 block text-sm font-medium text-[#57534e]";
+  const estados = {
+    disponible: "bg-[#e8f3ed] text-[#397259]",
+    alquilada: "bg-[#e8edf7] text-[#526b9b]",
+    alquilado: "bg-[#e8edf7] text-[#526b9b]",
+    vendida: "bg-[#f1ece9] text-[#85766d]",
+    vendido: "bg-[#f1ece9] text-[#85766d]",
+    mantenimiento: "bg-[#fff2dd] text-[#a16a23]",
+    no_disponible: "bg-[#f4e8ef] text-[#85486e]",
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">
-            Inventario de prendas
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#85486e]">
+            Gestión de prendas
+          </p>
+          <h2 className="text-2xl font-semibold tracking-tight text-[#292524] md:text-3xl">
+            Inventario
           </h2>
-          <p className="text-gray-500">
-            Administra las prendas de Ángeles Fashion.
+          <p className="mt-2 text-sm text-[#8a817d]">
+            Organiza las prendas, consulta sus precios y administra su
+            disponibilidad.
           </p>
         </div>
-
         <button
+          type="button"
           onClick={() => {
             if (mostrarFormulario) {
               cancelarFormulario();
@@ -252,18 +269,25 @@ export default function Inventario({ token }) {
               setMensaje("");
             }
           }}
-          className="rounded-lg bg-rose-600 px-5 py-2 text-white hover:bg-rose-700"
+          className={`cursor-pointer rounded-lg px-4 py-2.5 text-sm font-medium transition ${mostrarFormulario ? "border border-[#e7e1df] bg-white text-[#57534e] hover:bg-[#faf8f7]" : "bg-[#85486e] text-white hover:bg-[#713a5d]"}`}
         >
-          {mostrarFormulario ? "Cancelar" : "+ Agregar prenda"}
+          {mostrarFormulario ? "Cancelar" : "+ Nueva prenda"}
         </button>
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-100 p-3 text-red-700">{error}</div>
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+        >
+          {error}
+        </div>
       )}
-
       {mensaje && (
-        <div className="rounded-lg bg-green-100 p-3 text-green-700">
+        <div
+          role="status"
+          className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+        >
           {mensaje}
         </div>
       )}
@@ -271,41 +295,45 @@ export default function Inventario({ token }) {
       {mostrarFormulario && (
         <form
           onSubmit={guardarPrenda}
-          className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+          className="overflow-hidden rounded-2xl border border-[#eae6e3] bg-white"
         >
-          <h3 className="mb-5 text-lg font-semibold">
-            {prendaEditando !== null
-              ? "Editar prenda"
-              : "Registrar nueva prenda"}
-          </h3>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="border-b border-[#eeeae7] px-5 py-5 md:px-7">
+            <h3 className="text-lg font-semibold text-[#292524]">
+              {prendaEditando !== null
+                ? "Editar prenda"
+                : "Registrar nueva prenda"}
+            </h3>
+            <p className="mt-1 text-sm text-[#8a817d]">
+              Completa la información de la prenda para mantener el inventario
+              actualizado.
+            </p>
+          </div>
+          <div className="grid gap-x-5 gap-y-5 p-5 md:grid-cols-2 md:p-7">
             {[
               ["codigo", "Código"],
               ["nombre", "Nombre"],
               ["talla", "Talla"],
               ["color", "Color"],
             ].map(([campo, etiqueta]) => (
-              <label key={campo} className="space-y-1">
-                <span className="text-sm font-medium">{etiqueta}</span>
+              <label key={campo} className="block">
+                <span className={etiquetaClase}>{etiqueta}</span>
                 <input
                   name={campo}
                   value={formulario[campo]}
                   onChange={cambiarCampo}
                   required
-                  className="w-full rounded-lg border border-gray-300 p-2"
+                  className={campoClase}
                 />
               </label>
             ))}
-
-            <label className="space-y-1">
-              <span className="text-sm font-medium">Categoría</span>
+            <label className="block">
+              <span className={etiquetaClase}>Categoría</span>
               <select
                 name="categoria_id"
                 value={formulario.categoria_id}
                 onChange={cambiarCampo}
                 required
-                className="w-full rounded-lg border border-gray-300 p-2"
+                className={campoClase}
               >
                 <option value="">Seleccionar categoría</option>
                 {categorias.map((categoria) => (
@@ -315,29 +343,26 @@ export default function Inventario({ token }) {
                 ))}
               </select>
             </label>
-
-            <label className="space-y-1">
-              <span className="text-sm font-medium">Estado</span>
+            <label className="block">
+              <span className={etiquetaClase}>Estado</span>
               <select
                 name="estado"
                 value={formulario.estado}
                 onChange={cambiarCampo}
-                className="w-full rounded-lg border border-gray-300 p-2"
+                className={campoClase}
               >
                 <option value="disponible">Disponible</option>
                 <option value="alquilado">Alquilado</option>
                 <option value="vendido">Vendido</option>
               </select>
             </label>
-
             {[
               ["precio_venta", "Precio de venta"],
               ["precio_alquiler", "Precio de alquiler"],
             ].map(([campo, etiqueta]) => (
-              <label key={campo} className="space-y-1">
-                <span className="text-sm font-medium">{etiqueta}</span>
+              <label key={campo} className="block">
+                <span className={etiquetaClase}>{etiqueta}</span>
                 <input
-                  key={campo}
                   type="number"
                   min="0"
                   step="0.01"
@@ -345,111 +370,155 @@ export default function Inventario({ token }) {
                   value={formulario[campo]}
                   onChange={cambiarCampo}
                   required
-                  className="w-full rounded-lg border border-gray-300 p-2"
+                  className={campoClase}
                 />
               </label>
             ))}
-
-            <label className="space-y-1 md:col-span-2">
-              <span className="text-sm font-medium">Descripción</span>
+            <label className="block md:col-span-2">
+              <span className={etiquetaClase}>Descripción</span>
               <textarea
                 name="descripcion"
                 value={formulario.descripcion}
                 onChange={cambiarCampo}
-                rows="3"
-                className="w-full rounded-lg border border-gray-300 p-2"
+                rows={3}
+                className={`${campoClase} resize-y`}
               />
             </label>
           </div>
-
-          <button
-            type="submit"
-            disabled={guardando}
-            className="mt-5 rounded-lg bg-rose-600 px-6 py-2 text-white hover:bg-rose-700 disabled:opacity-50"
-          >
-            {guardando
-              ? "Guardando..."
-              : prendaEditando !== null
-                ? "Actualizar prenda"
-                : "Guardar prenda"}
-          </button>
+          <div className="flex flex-wrap justify-end gap-3 border-t border-[#eeeae7] bg-[#fcfbfa] px-5 py-4 md:px-7">
+            <button
+              type="button"
+              onClick={cancelarFormulario}
+              className="cursor-pointer rounded-lg border border-[#e7e1df] bg-white px-4 py-2.5 text-sm font-medium text-[#57534e] hover:bg-[#f8f7f5]"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={guardando}
+              className="cursor-pointer rounded-lg bg-[#85486e] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#713a5d] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {guardando
+                ? "Guardando..."
+                : prendaEditando !== null
+                  ? "Actualizar prenda"
+                  : "Guardar prenda"}
+            </button>
+          </div>
         </form>
       )}
 
-      <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-[#eae6e3] bg-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eeeae7] px-5 py-5 md:px-7">
+          <div>
+            <h3 className="font-semibold text-[#292524]">
+              Prendas registradas
+            </h3>
+            <p className="mt-1 text-xs text-[#8a817d]">
+              Listado de prendas y sus precios actuales
+            </p>
+          </div>
+          <span className="rounded-full bg-[#f6edf2] px-3 py-1.5 text-xs font-semibold text-[#85486e]">
+            {prendas.length} {prendas.length === 1 ? "prenda" : "prendas"}
+          </span>
+        </div>
         {cargando ? (
-          <p className="p-6 text-gray-500">Cargando inventario...</p>
+          <p className="px-7 py-12 text-center text-sm text-[#8a817d]">
+            Cargando inventario...
+          </p>
         ) : prendas.length === 0 ? (
-          <p className="p-6 text-gray-500">No hay prendas registradas.</p>
+          <div className="px-7 py-14 text-center">
+            <p className="font-medium text-[#292524]">
+              Todavía no hay prendas registradas
+            </p>
+            <p className="mt-2 text-sm text-[#8a817d]">
+              Usa «Nueva prenda» para registrar la primera.
+            </p>
+          </div>
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="p-4">ID</th>
-                <th className="p-4">Código</th>
-                <th className="p-4">Nombre</th>
-                <th className="p-4">Estado</th>
-                <th className="p-4">Venta</th>
-                <th className="p-4">Alquiler</th>
-                <th className="p-4">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {prendas.map((prenda) => (
-                <tr key={prenda.id} className="border-t">
-                  <td className="p-4">{prenda.id}</td>
-                  <td className="p-4">{prenda.codigo}</td>
-                  <td className="p-4">{prenda.nombre}</td>
-                  <td className="p-4 capitalize">{prenda.estado}</td>
-                  <td className="p-4">{formatoPrecio(prenda.precio_venta)}</td>
-                  <td className="p-4">
-                    {formatoPrecio(prenda.precio_alquiler)}
-                  </td>
-
-                  <td className="p-4">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => editarPrenda(prenda)}
-                          className="rounded-lg bg-blue-100 px-3 py-1 text-blue-700 hover:bg-blue-200"
-                        >
-                          Editar
-                        </button>
-
-                        <button
-                          onClick={() => eliminarPrenda(prenda)}
-                          disabled={
-                            prenda.puede_eliminar === false ||
-                            eliminandoId === prenda.id
-                          }
-                          title={
-                            prenda.puede_eliminar === false
-                              ? prenda.motivo_bloqueo
-                              : "Eliminar prenda"
-                          }
-                          className={`rounded-lg px-3 py-1 ${
-                            prenda.puede_eliminar === false
-                              ? "cursor-not-allowed bg-gray-100 text-gray-400"
-                              : "bg-red-100 text-red-700 hover:bg-red-200"
-                          } disabled:opacity-60`}
-                        >
-                          {eliminandoId === prenda.id
-                            ? "Eliminando..."
-                            : "Eliminar"}
-                        </button>
-                      </div>
-
-                      {prenda.puede_eliminar === false && (
-                        <p className="flex items-center gap-1 text-xs text-amber-700">
-                          {prenda.motivo_bloqueo}
-                        </p>
-                      )}
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-190 text-left text-sm">
+              <thead className="bg-[#fcfbfa] text-xs font-medium text-[#8a817d]">
+                <tr>
+                  <th className="px-5 py-4 font-medium">Prenda</th>
+                  <th className="px-5 py-4 font-medium">Código</th>
+                  <th className="px-5 py-4 font-medium">Estado</th>
+                  <th className="px-5 py-4 font-medium">Precio de venta</th>
+                  <th className="px-5 py-4 font-medium">Precio de alquiler</th>
+                  <th className="px-5 py-4 text-right font-medium">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[#f0edeb]">
+                {prendas.map((prenda) => (
+                  <tr key={prenda.id} className="transition hover:bg-[#fcfbfa]">
+                    <td className="px-5 py-4">
+                      <p className="font-semibold text-[#292524]">
+                        {prenda.nombre}
+                      </p>
+                      <p className="mt-1 text-xs text-[#a8a29e]">
+                        ID #{prenda.id}
+                      </p>
+                    </td>
+                    <td className="px-5 py-4 font-medium text-[#57534e]">
+                      {prenda.codigo}
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${estados[prenda.estado] || "bg-[#f1ece9] text-[#85766d]"}`}
+                      >
+                        {String(prenda.estado || "Sin estado").replaceAll(
+                          "_",
+                          " ",
+                        )}
+                      </span>
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-4 text-[#57534e]">
+                      {formatoPrecio(prenda.precio_venta)}
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-4 text-[#57534e]">
+                      {formatoPrecio(prenda.precio_alquiler)}
+                    </td>
+                    <td className="px-5 py-4 text-right">
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => editarPrenda(prenda)}
+                            className="cursor-pointer rounded-lg border border-[#e7e1df] px-3 py-1.5 text-xs font-medium text-[#57534e] transition hover:border-[#c8a5b7] hover:text-[#85486e]"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => eliminarPrenda(prenda)}
+                            disabled={
+                              prenda.puede_eliminar === false ||
+                              eliminandoId === prenda.id
+                            }
+                            title={
+                              prenda.puede_eliminar === false
+                                ? prenda.motivo_bloqueo
+                                : "Eliminar prenda"
+                            }
+                            className="cursor-pointer rounded-lg border border-[#f1d8d8] px-3 py-1.5 text-xs font-medium text-[#b45353] transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-[#eeeae7] disabled:bg-[#faf9f8] disabled:text-[#b4aaa5]"
+                          >
+                            {eliminandoId === prenda.id
+                              ? "Eliminando..."
+                              : "Eliminar"}
+                          </button>
+                        </div>
+                        {prenda.puede_eliminar === false && (
+                          <p className="max-w-50 text-right text-[11px] leading-relaxed text-[#a16a23]">
+                            {prenda.motivo_bloqueo}
+                          </p>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
