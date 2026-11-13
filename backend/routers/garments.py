@@ -70,7 +70,49 @@ def crear_prenda(datos: PrendaCreate, db: Session = Depends(get_db)):
 def listar_prendas(db: Session = Depends(get_db)):
     prendas = db.scalars(select(Prendas).order_by(Prendas.id)).all()
 
-    return prendas
+    resultado = []
+
+    for prenda in prendas:
+        tiene_ventas = (
+            db.scalar(
+                select(DetallesVenta.id)
+                .where(DetallesVenta.prenda_id == prenda.id)
+                .limit(1)
+            )
+            is not None
+        )
+
+        tiene_alquileres = (
+            db.scalar(
+                select(DetallesAlquiler.id)
+                .where(DetallesAlquiler.prenda_id == prenda.id)
+                .limit(1)
+            )
+            is not None
+        )
+
+        puede_eliminar = not (tiene_ventas or tiene_alquileres)
+
+        if tiene_ventas and tiene_alquileres:
+            motivo = "Tiene ventas y alquileres registrados"
+        elif tiene_ventas:
+            motivo = "Tiene ventas registradas"
+        elif tiene_alquileres:
+            motivo = "Tiene alquileres registrados"
+        else:
+            motivo = None
+
+        datos = {
+            columna.name: getattr(prenda, columna.name)
+            for columna in Prendas.__table__.columns
+        }
+
+        datos["puede_eliminar"] = puede_eliminar
+        datos["motivo_bloqueo"] = motivo
+
+        resultado.append(datos)
+
+    return resultado
 
 
 @router.get("/{prenda_id}")

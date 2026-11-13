@@ -101,7 +101,26 @@ def listar_ventas(
 ):
     ventas = db.scalars(select(Ventas).order_by(Ventas.fecha.desc())).all()
 
-    return ventas
+    resultado = []
+
+    for venta in ventas:
+        detalles = db.scalars(
+            select(DetallesVenta).where(DetallesVenta.venta_id == venta.id)
+        ).all()
+
+        total = sum(detalle.precio for detalle in detalles)
+
+        resultado.append(
+            {
+                "id": venta.id,
+                "cliente_id": venta.cliente_id,
+                "usuario_id": venta.usuario_id,
+                "fecha": venta.fecha,
+                "total": float(total),
+            }
+        )
+
+    return resultado
 
 
 @router.get("/{venta_id}")
