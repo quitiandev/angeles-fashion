@@ -16,7 +16,7 @@ class Clientes(Base):
         String(20), unique=True, nullable=False
     )
     telefono: Mapped[str] = mapped_column(String(20), nullable=True)
-    correo: Mapped[str | None] = mapped_column(String(100), unique=True, nullable=False)
+    correo: Mapped[str | None] = mapped_column(String(100), unique=True, nullable=True)
     creado_en: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, nullable=False
     )

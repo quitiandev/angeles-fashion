@@ -1,8 +1,20 @@
 from fastapi import FastAPI
 from routers.categories import router as categories_router
+from routers import auth
+from routers.clients import router as clients_router
+from routers.garments import router as garments_router
+from routers.sales import router as sales_router
+from routers.rentals import router as rentals_router
+from routers import reports
 
 app = FastAPI(title="Angeles Fashion API")
 app.include_router(categories_router)
+app.include_router(auth.router)
+app.include_router(clients_router)
+app.include_router(garments_router)
+app.include_router(sales_router)
+app.include_router(rentals_router)
+app.include_router(reports.router)
 
 
 @app.get("/")

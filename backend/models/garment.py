@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, String, Numeric, ForeignKey
+from decimal import Decimal
 from sqlalchemy.orm import Mapped, mapped_column
 
 from models.base import Base
@@ -20,8 +21,9 @@ class Prendas(Base):
     talla: Mapped[str] = mapped_column(String(10), nullable=False)
     color: Mapped[str] = mapped_column(String(20), nullable=False)
 
-    precio_venta: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    precio_alquiler: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    precio_venta: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
+
+    precio_alquiler: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
 
     estado: Mapped[str] = mapped_column(String(20), nullable=False)
 
